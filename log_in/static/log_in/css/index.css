@@ -1,0 +1,235 @@
+body {
+	margin: 0;
+	font-family: sans-serif;
+}
+
+article input {
+	padding: 10px;
+	border: none;
+	border-radius: 5px;
+	text-align: center;
+}
+
+article label {
+	margin-right: 10px;
+}
+
+.nav-right-box {
+	display: flex;
+	justify-content: space-evenly;
+	width: 500px;
+}
+
+.user-btns-box a {
+	text-decoration: none;
+	background-color: #8f3535;
+	color: white;
+	padding: 5px 20px;
+	border-radius: 10px;
+	border: 1px solid white;
+}
+
+.user-btns-box a:hover {
+	border: 1px solid #8f3535; 
+	background-color: white;
+	color: #8f3535;
+}
+
+.top-nav-box {
+	/*
+	height: 75px;
+	*/
+	max-height: max-content;
+	width: 100%;
+	border-bottom: 1px solid grey;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.user-btns-box {
+	display: flex;
+	align-items: center;
+	width: 200px;
+	justify-content: space-between;
+	
+}
+
+.inner-nav-left-box h1 {
+	color: #8f3535;
+}
+
+body > h1 {
+	text-align: center;
+	font: 16px "Fira Sans", sans-serif;
+	color: #6a1515;
+}
+
+#notifications-bell {
+	height: 40px;
+	width: auto;
+}
+
+#profile-icon {
+	height: 50px;
+	width: auto;
+}
+
+
+.icon-greeting-box {
+	display: flex;
+	align-items: center;
+}
+
+.dropdown {
+	display: flex;
+	align-items: center;
+}
+
+.custom-greeting {
+	margin-left: 5px;
+	color: #0000009c;
+}
+
+
+.body-box {
+	display:flex;
+}
+
+.main-section-box {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+    flex-direction: column;
+    align-items: center;
+    height: max-content;
+    padding-bottom: 50px;
+}
+
+
+
+article {
+	background-color: #f3f3f3;
+	margin: 25px;
+	border-radius: 5px;
+	box-shadow: 3px 4px 20px 0px rgb(0 0 0 / 20%);
+}
+
+.demographic-box {
+	grid-area: de;
+}
+
+.school-major-box {
+	grid-area: sm;
+}
+
+/*
+ * going to change below class to 
+ * current-courses-box instead because
+ * i dont think we have enough space in same
+ * row for tutors as we'll need to display user's 
+ * current courses. we'll probably have to start new 
+ * row for current tutors if at all.
+.current-tutors-box {
+	grid-area: tutors;
+}
+*/
+.current-courses-box {
+	grid-area: co;
+}
+
+.new-course-box {
+	grid-area: nc;
+}
+
+
+.inner-main-section-box {
+	padding-top: 10px;
+	width: max-content;
+	margin: 0 10px;
+	display: grid;
+	/*
+	grid-template-columns: repeat(2, 1fr);
+	*/
+	grid-template-columns: repeat(4, 1fr);
+	grid-column-gap: 30px;
+	grid-row-gap: 50px;
+	grid-auto-rows: minmax(100px, auto);
+	grid-template-areas:
+	/*
+		"demo		demo	school-major	school-major"
+		"courses	courses	newcourse	newcourse";
+		*/
+		"de	de	sm	sm"
+		"co	co	nc	nc";
+}
+
+
+.lbl-ipt-grp, .lbl-ipt-grp form {
+	display: flex;
+	align-items: center;
+}
+
+.generic-article-btns {
+    text-decoration: none;
+    border-radius: 5px;
+    background-color: white;
+    padding: 5px;
+    color: #8f3535;
+    box-shadow: 3px 4px 20px 0px rgb(0 0 0 / 20%);
+    border: none;
+    margin: 10px;
+
+}
+
+#add-course-btn {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.generic-article-btns:hover {
+    color: white;
+    background-color: #8f3535;
+}
+
+.textarea-box {
+    display: flex;
+    align-items: start;
+    margin: 10px 0px;
+}
+
+
+.success-msgs {
+    border: 1px solid green;
+    border-radius: 5px;
+    color: green;
+    width: max-content;
+    background-color: #e3f1e3;
+    padding: 10px;
+}
+
+.error-msgs {
+    border: 1px solid #ffa7a7;
+    border-radius: 5px;
+    color:#eb0c0c; 
+    width: max-content;
+    background-color: #ffe8e8;
+    padding: 10px;
+}
+
+#approval-icon {
+    padding: 10px 0px;
+}
+
+#cross-icon {
+    filter: invert(11%) sepia(55%) saturate(5785%) hue-rotate(3deg) brightness(112%) contrast(102%);
+}
+
+#set-group-form {
+	background-color: #f3f3f3;
+	border-radius: 5px;
+	box-shadow: 3px 4px 20px 0px rgb(0 0 0 / 20%);
+    width: max-content;
+    padding: 10px;
+    margin-top: 10px;
+}

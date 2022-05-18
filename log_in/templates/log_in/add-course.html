@@ -1,0 +1,33 @@
+{% extends 'log_in/profile-details.html' %}
+
+{% load static %}
+
+{% block styles %}
+{{ block.super }}
+	<link rel="stylesheet" type="text/css" href="{% static 'log_in/css/add_course.css' %}">
+{% endblock %}
+
+
+{% block new_course_div %}
+	<article class="new-course-box">
+		<form name="search_course_form" action="{% url 'search_course' %}" method="post">
+			{% csrf_token %}
+			<div class="search-wrapper">
+				<input type="text" id="search-course" name="qinput" placeholder="Search by course code/course name." size=40>
+				<div class="search-icon">
+					<input type="image" id="search-icon" width="20" alt="Search Course" src="{% static 'log_in/image/search.svg' %}">
+				</div>
+			</div>
+            <input type="hidden" name="from" value={{ route0 }}>
+		</form>
+
+        {% comment %}
+        below block is populated/overridden by 'course-form.html' template
+        {% endcomment %}
+		{% block search_results %}
+		{% endblock %}
+	</article>
+{% endblock new_course_div %}
+
+{% block add_course_section_btn %}
+{% endblock %}

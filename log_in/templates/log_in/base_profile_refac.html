@@ -1,0 +1,206 @@
+{% extends "log_in/index.html" %}
+
+{% load static %}
+
+
+
+{% block nav-right-section %}
+<div class="nav-right-box">
+	<div class="dropdown">
+		<img id="notifications-bell" src="{% static '/log_in/image/note-bell.svg' %}">
+		<div class="dropdown-content">
+			{% comment %}
+			todo
+			fetch api should be used here to update content dynamically.
+			{% endcomment %}
+			<a href="#">Notification 1</a>
+			<a href="#">Notification 2</a>
+			<a href="#">Notification 3</a>
+		</div>
+	</div>
+
+	<div class="dropdown">
+		<div class="icon-greeting-box">
+			<img id="profile-icon" src="{% static '/log_in/image/user.png' %}">
+			<div class="custom-greeting">
+				<span>Hello, <b>{{ user.username }}</b></span>
+			</div>
+		</div>
+			<div class="dropdown-content">
+				{% if isTutor %}
+				<a href="{% url 'profile-details' 'tutor' %}">Profile</a>
+				{% elif isStudent %}
+				<a href="{% url 'profile-details' 'student' %}">Profile</a>
+				{% endif %}
+				<a href="#">Sign out</a>
+			</div>
+	</div>
+</div>
+{% endblock %}
+
+
+{% block main-body %}
+<div class="body-box">
+	<div class="sidebar-nav">
+        <a href="{% url 'account' %}">Home</a>
+    {% if isTutor %}
+        <a href="#">Availability</a>
+    {% endif %}
+	{% if isStudent %}
+		{% block sidebar %}
+        <a href="{% url 'query-tutors' %}">Find Tutors</a>
+		{% endblock %}
+	{% endif %}
+	</div>
+
+	{% block main-content %}
+    <div class="main-section-box">
+        <div class="messages-box"> 
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                        <p class="success-msgs">{{ message }}</p>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        {% if "NOACCOUNTTYPE" in message.extra_tags %}
+                            <form id="set-group-form" method="post" action="{% url 'setgroup' %}">
+                                {% csrf_token %}
+                                <p> Select type of user account: </p>
+                                <input type="radio" id="tutor" name="group" value="tutors">
+                                <label for="tutor">Tutor</label>
+                                <input type="radio" id="student" name="group" value="students">
+                                <label for="student">Student</label>
+                                <br>
+                                <button class="generic-article-btns" type="submit">Save</button>
+                            </form>
+                        {% endif %}
+                    <p class="error-msgs">{{ message }}</p>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="requests-appts-box">
+            <article class="requests">
+                <h1 class="article-headings">Requests</h1>
+                {% comment %}
+                TODO: define how to handle and render previous/stale/closed/completed requests from current requests
+                and how many requests to view at a time. Same for appointments. Decide how far into calendar we should
+                display upcoming appointments, what to display for past/expired/closed appointments and how many for each.
+                {% endcomment %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>{% if isTutor %}Student{% elif isStudent %}Tutor{% endif %}'s<br>Name</th>
+                            <th>Requested<br>Date &amp Time</th>
+                            <th>Location</th>
+                            <th>Subject</th>
+                            <th>Pending</th>
+                            <th>Approved</th>
+                            {% if isStudent %}
+                            <th>Notes</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    {% if requests %}
+
+                        {% if isTutor %}
+                        {% comment %}
+                        going to omit 'action' attribute of the form element because the 
+                        url to submit form to will depend on which button element is pressed 'approve/deny'.
+                        so we'll need to specify 'formaction' attribute on both buttons to point to
+                        view/url that will handle form submission accordingly.
+                        {% endcomment %}
+                        <form method="post" id="process-request-form"> 
+                               {% for request in requests %}
+                               <tr>
+                                   <td>{% if request.approval == None %}<input type="radio" class="tutor-radio" name="student_request" value="{{ request.id }}">{% else %}{% endif %}</td>
+                                   <td>{{ request.student.first_name}} {{ request.student.last_name }}</td>
+                                   <td>{{ request.appt_details.date_and_time }}</td>
+                                   <td>{{ request.appt_details.location }}</td>
+                                   <td><input type="text" size=10 value="{{ request.appt_details.subject }}" readonly></td>
+                                   <td>{% if request.pending %}Open{% else %}Closed{% endif %}</td>
+                                   <td id="approval-icon">{% if request.approval %}<img id="checkmark-icon" src="{% static 'log_in/image/checkmark--v1.png' %}">{% elif request.approval == 0 %}<img id="cross-icon" src="{% static 'log_in/image/xmark.svg' %}">{% elif request.approval == None %}--{% endif %}</td>
+                               </tr>
+                               {% endfor %}
+                               {% csrf_token %}
+                            </form>
+                        {% elif isStudent %}
+                           {% for request in requests %}
+                           <tr>
+                               <td></td>
+                               <td>{{ request.tutor_requested.first_name}} {{ request.tutor_requested.last_name }}</td>
+                               <td>{{ request.appt_details.date_and_time }}</td>
+                               <td>{{ request.appt_details.location }}</td>
+                               <td><input type="text" size=10 value="{{ request.appt_details.subject }}" readonly></td>
+                               <td>{% if request.pending %}Open{% else %}Closed{% endif %}</td>
+                               <td id="approval-icon">{% if request.approval %}<img id="checkmark-icon" src="{% static 'log_in/image/checkmark--v1.png' %}">{% elif request.approval == 0 %}<img id="cross-icon" src="{% static 'log_in/image/xmark.svg' %}">{% elif request.approval == None %}--{% endif %}</td>
+                               <td>{{ request.notes }}</td>
+                           </tr>
+                           {% endfor %}
+                        {% else %}
+                            <tr>
+                            </tr>
+                            <tr>
+                            </tr>
+                        {% endif %}
+
+                    {% endif %}
+                </table>
+                {% if isTutor %}
+                {% comment %}
+                this text input element is outside a <form> element but we associate it with a form element using
+                <input> element's global attribute 'form'.
+                {% endcomment %}
+                <div class="textarea-box">
+                <label for="notes">Notes for student: </label>
+                <textarea id="notes" form="process-request-form" name="notes-request" rows="5" cols="30" placeholder="Additional info for student if approving request or reason for denial if denying. Optional" maxlength="100"></textarea>
+                </div>
+                <div class="article-btns">
+                    <button form="process-request-form" type="submit" class="generic-article-btns" formaction="{% url 'approve-request' %}" formmethod="post">Approve</button>
+                    <button form="process-request-form" type="submit" class="generic-article-btns" formaction="{% url 'deny-request' %}" formmethod="post">Deny</button>
+                </div>
+                {% endif %}
+                
+            </article>
+           
+            <article class="upcoming-appts">
+                <h1 class="article-headings">Appointments</h1>
+                <table class="appts">
+                    <thead>
+                        <tr>
+                            <th>{% if isTutor %}Student{% elif isStudent %}Tutor{% endif %}'s<br>Name</th>
+                            <th>Requested<br>Date &amp Time</th>
+                            <th>Location</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    {% if approved_appts %}
+                       {% for appt in approved_appts %}
+                       <tr>
+                           <td>{% if isTutor %}{{ appt.student.first_name }} {{ appt.student.last_name }} {% else %} {{ appt.tutor_requested.first_name }} {{ appt.tutor_requested.last_name }}  {% endif %}</td>
+                           <td>{{ appt.appt_details.date_and_time }}</td>
+                           <td>{{ appt.appt_details.location }}</td>
+                           <td><input type="text" size=20 value="{{ appt.notes }}" readonly></td>
+                       </tr>
+                       {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% endif %}
+            </article>
+        </div>
+    </div>
+
+
+	{% endblock %}
+</div>
+{% endblock %}

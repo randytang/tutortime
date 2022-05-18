@@ -1,0 +1,35 @@
+.search-results-box {
+    justify-content: space-around;
+    align-items: start;
+    padding: 10px;
+    width: max-content;
+}
+
+.list-links {
+    text-decoration: none;
+    color: grey;
+}
+
+.list-links:hover {
+    color: #ff6d6d;
+    font-weight: bold;
+
+}
+
+/*
+ * styles for find-tutors-overview template
+ * below
+ */
+
+.profile-pic {
+    width: 128px;
+    border-radius: 50%;
+}
+
+
+textarea {
+    border: none;
+    margin: 10px;
+    resize: none;
+}
+

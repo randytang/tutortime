@@ -1,0 +1,37 @@
+{% extends 'log_in/find-tutors-list.html' %}
+{% comment %}
+i have to remeber to extend the most recent/previous page we're navigating from
+because if we want to maintain/render state from different section of page, we have 
+to carry that state over from previous template so 'find-tutors.html' below is not the most
+recent template, 'find-tutors-list.html' is so have to extend that instead.
+{% extends 'log_in/find-tutors.html' %}
+{% endcomment %}
+{% load static %}
+
+
+
+{% block about_tutor %}
+<article class="about-box">
+    {% if tutor %}
+    <p class="tutor-heading">{{ tutor.user.first_name }} {{tutor.user.last_name }}</p>
+    {% if profile.image %}
+    {% else %}
+    <img class="profile-pic" src="{% static 'log_in/image/blankprofileimage.svg' %}">
+    {% endif %}
+    <label for="about">About me: </label>
+    <textarea cols="30" rows="5" wrap="hard" readonly>{{ tutor.about }}</textarea>
+    <div class="user-btns-box">
+        {% comment %}
+        one thing we have to keep in mind is if a template extends another, if that extended/base template
+        has a templating tag i.e 'url' or 'static' that depends on values passed in from its view handler,
+        then those same values also have to be provided for the view that renders the extended template.
+        we're running into issue now because the 'tutor-appt-form' template extends this and so this
+        template needs to be re-rendered but we failed to provide value for 'tutor.user_id'
+        {% endcomment %}
+        <a href="{% url 'request-appt' user.id tutor.user_id course_id %}">Request</a>
+
+        </a>
+    </div>
+    {% endif %}
+</article>
+{% endblock %}

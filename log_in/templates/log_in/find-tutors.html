@@ -1,0 +1,77 @@
+{% extends 'log_in/base_profile_refac.html' %}
+{% load static %}
+
+{% block styles %}
+	{{ block.super }}
+	<link rel="stylesheet" type="text/css" href="{% static 'log_in/css/find-tutors.css' %}">
+{% endblock %}
+
+{% block main-content %}
+<div class="main-section-box">
+    <div class="messages_box">
+        {% if messages %}
+        {% for message in messages %}
+        <p class="messages">{{ message }}</p>
+        {% endfor %}
+        {% endif %}
+    </div>
+	<div class="find-tutors-box">
+		<article class="criteria-box">
+            <div class="input-box">
+                {% comment %}
+                the most common criteria to use to search for a tutor
+                would be finding one based on the courses a student
+                is taking. so we'll have one input to type in 
+                name of course. perhaps we'll add second criteria
+                to search by topic/subject. 
+                {% endcomment %}
+                <form name="search_course_form" action="{% url 'search_course' %}" method="post">
+                {% csrf_token %}
+                <div class="search-wrapper">
+                    <input type="text" id="courses-ipt" name="qinput" placeholder="Search tutors by course code/course name." size=40 autocomplete=false>
+                    <div class="search-icon">
+                        <input type="image" id="search-icon" width="20" alt="Search Course" src="{% static 'log_in/image/search.svg' %}">
+                    </div>
+                </div>
+
+                <input type="hidden" name="from" value={{ route0 }}>
+                </form>
+
+                {% block course_search_results %}
+                {% if results %}
+                <div class="course_result">
+                    <form id="course_selection" method="post" action="{% url 'tutor-course' %}">
+                    <table>
+                    {% for record in results %}
+                        <div class="course_row_box">
+                        <tr>
+                            <td class="course-radio-td"><label for="course_id_{{ record.id }}"><input id="course_id_{{ record.id }}" name="course" type="radio" value="{{ record.id }}" required></td><td>{{ record.course_code }}</td><td>{{ record.name }}</td></label>
+                        </tr>
+                    </div>
+                    {% endfor %}
+                    </table>
+                    <div class="article-btns-box">
+                        <button form="course_selection" type="submit" id="find-tutor-btn" class="generic-article-btns">Find Tutor</button>
+                    </div>
+                        {% csrf_token %}
+                        <input type="hidden" name="from" value={{ route0 }}>
+                     </form>
+                </div>
+                {% endif %}
+                {% endblock %}
+
+            </div>
+		</article>
+
+        {% block tutor_search_results %}
+        {% endblock %}
+
+        {% block about_tutor %}
+        {% endblock %}
+
+        {% block reservation %}
+        {% endblock %}
+
+	</div>
+</div>
+{% endblock %}

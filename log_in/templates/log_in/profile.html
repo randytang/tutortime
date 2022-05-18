@@ -1,0 +1,18 @@
+{% load static %}
+<!doctype html>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="{% static 'log_in/css/profile.css' %}">
+
+
+	{% if error %}
+		<h1>{{ error }}</h1>
+	{% else %}
+		<h1>{{ group }}</h1>
+		<p>hello {{ user.username }}</p>
+		{% if group == "TUTOR" %}
+			<p>Rate: ${{ user.rate }}/hr</p>
+		{% endif %}
+
+	{% endif %}
+	
+</html>

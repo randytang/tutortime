@@ -1,0 +1,57 @@
+{% extends 'log_in/profile-details.html' %}
+
+{% load static %}
+
+{% block school-input %}
+{% comment %}
+i hope to make this template and view as generic as possible but
+i think what will prove most challenging is setting the 'action' attribute
+of the form element. determining which named url and if/any parameters to pass
+we may just have to have a view function for editing each field if we cant
+find a way to generify the 'action' attribute.
+{% endcomment %}
+<form method="post" action="{% url 'save-edit' 'school' %}">
+	<input {% if isMultipleValue %} list="{{ listAttributeName }}" {% endif %} type="text" id="{{ idOfInput }}" name="{{ nameOfInput }}" placeholder="{{ existingValue }}" {% if size %} size={{ size }} {% endif %} autocomplete="off">
+	{% block field_data_list %}
+	<datalist id="{{ listAttributeName }}">
+		{% for option in options_for_datalist %}
+			{% comment %}
+			right now, only one 'option' element is being rendered. i'm not
+			sure if i have to wrap it in an 'if' tag but we'll see.
+			nope so for some reason, 'School.objects.all() is only returning
+			one. oh lol, nvm, now i get it. its returning one queryset which
+			we have to iterate. wait, django's template mechanism should
+			allow us to iterate through queryset using 'for' tag, so why
+			isn't it working? OMG, it was a simple db issue. because I
+			checked out an older commit, the sqlite file reverted back to
+			older state and thus only had one record in "School" table.
+			{% endcomment %}
+			{% if option %}
+				<option value="{{ option.name }}">
+			{% endif %}
+		{% endfor %}
+	</datalist>
+	{% endblock %}
+	{% comment %}
+	lol, i dont think ive ever tried to use an img element as a submit
+	button for a form. i believe i've used an embedded anchor element before.
+	lol, looks like there's actually an "image" type for input element.
+	<img src="{% static 'log_in/image/icons8-save-50.png' %}" width=20 height=20>
+	<img src="{% static 'log_in/image/icons8-delete-view-50.png' %}" width=20 height=20>
+	{% endcomment %}
+	<input type="image" id="save-icon" src="{% static 'log_in/image/icons8-save-50.png' %}" width=20 height=20>
+	{% comment %}
+	mdn docs state 'height' and 'width' attributes can be used/specified when 
+	using the input element with type 'image'.
+	{% endcomment %}
+	{% comment %}
+	so when i clicked on the delete button/icon, it brought us back to regular
+	provile view and then i realized, the <input> element is submitting 
+	to same parent form element as the "save" icon/button so we need to 
+	override the formaction on the 'delete' icon/button to point to the 
+	view that handles removing/deleting a field.
+	{% endcomment %}
+	<input formaction="{% url 'remove-field' 'school'  %}" type="image" id="delete-icon" src="{% static 'log_in/image/icons8-delete-view-50.png' %}"  width=20 height=20>
+		   {% csrf_token %}
+</form>
+{% endblock %}

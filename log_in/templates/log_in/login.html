@@ -1,0 +1,47 @@
+{% load static %}
+<!doctype html>
+	<meta charset="utf-8">
+    {% block styles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'log_in/css/login.css' %}">
+    {% endblock %}
+
+	<body>
+        <div class="body-box">
+            <div class="form-box">
+                {% block form_section %}
+                <form id="login-form" method="post" action="{% url 'mylogin' %}">
+                    {% csrf_token %}
+                    <div class="input-box">
+                        {{ form.username.label_tag }}
+                        <br>
+                        {{ form.username }}
+                    </div>
+                    <div class="input-box">
+                        {{ form.password.label_tag }}
+                        <br>
+                        {{ form.password }}
+                    </div>
+                    <br>
+
+                    <input type="hidden" name="next" value="{{ next }}">
+                    <div class="input-box">
+                        <button class="login-btn" form="login-form" type="submit">Login</button>
+                    </div>
+                </form>
+                <div class="options">
+                    <a id="signup-anchor" href="{% url 'signup' %}">Sign up</a>
+                </div>
+                {% endblock %}
+            </div>
+            <div class="messages">
+                {% if messages %}
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+	</body>
+
+</html>

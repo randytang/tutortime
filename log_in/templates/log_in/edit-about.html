@@ -1,0 +1,18 @@
+{% extends 'log_in/profile-details.html' %}
+
+{% load static %}
+
+{% block about_section %}
+<form method="post" action="{% url 'edit-about' user_id %}">
+	<div class="lbl-ipt-grp">
+        {% if tutor_profile %}
+        <textarea name="about-msg" rows="5" cols="30" wrap="hard" spellcheck="true">{{ tutor_profile.about }}</textarea> 
+        {% else %}
+        <textarea name="about-msg" placeholder="Please type something about yourself for students to see..." rows="5" cols="30" spellcheck="true" autocomplete="off" autofocus></textarea>
+        {% endif %}
+		<input type="image" id="save-icon" src="{% static 'log_in/image/icons8-save-50.png' %}" width=20 height=20 title="Save changes.">
+	</div>
+   {% csrf_token %}
+</form>
+{% endblock %}
+

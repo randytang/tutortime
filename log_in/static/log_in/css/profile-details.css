@@ -1,0 +1,106 @@
+#school-major-box-results, .messages, .success-messages {
+	border: 1px solid green;
+	border-radius: 5px;
+	color: green;
+	width: max-content;
+	background-color: #e3f1e3;
+	padding: 10px;
+}
+
+article {
+	width: max-content;
+	/*
+	min-width: 400px;
+	*/
+	margin: 0 auto;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+article div {
+	margin: 5px 0px;
+}
+
+img {
+	margin: 0px 10px;
+}
+
+.section-btns {
+	display: flex;
+	width: 100%;
+	justify-content: right;
+}
+
+/*
+#add-major-btn {
+*/
+.add-btns {
+	text-decoration: none;
+	border-radius: 5px;
+	background-color: white;
+	padding: 5px;
+	color: #8f3535;
+	box-shadow: 3px 4px 20px 0px rgb(0 0 0 / 20%);
+    border: none;
+	
+}
+
+#add-course-btn {
+    font-size: 16px;
+    font-weight: bold;
+}
+/*
+#add-major-btn:hover {
+*/
+.add-btns:hover {
+	color: white;
+	background-color: #8f3535;
+}
+
+.table-box {
+	width: 100%;
+	display: flex;
+	justify-content: left;
+}
+
+/*
+table, tr, td {
+*/
+td {
+	background-color: white;
+	box-sizing: border-box;
+	border: 1px solid black;
+	border-collapse: collapse;
+	padding: 5px;
+	font-size: .8rem;
+	color: #3a3a3a;
+}
+
+.tutors-course-heading, #general-course-heading {
+	font-weight: bold;
+	font-size: .8rem;
+	margin: 0;
+}
+
+.delete-icon, img {
+	margin: 0;
+}
+
+.edit-td, .delete-td {
+	background-color: #f3f3f3;
+	border: none;
+}
+
+.about-txt-box {
+    width: 200px;
+    height: 100px;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 5px;
+}
+
+
+

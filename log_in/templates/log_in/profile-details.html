@@ -1,0 +1,204 @@
+{% extends 'log_in/base_profile_refac.html' %}
+{% load static %}
+
+{% block styles %}
+	{{ block.super }}
+	<link rel="stylesheet" type="text/css" href="{% static 'log_in/css/profile-details.css' %}">
+{% endblock %}
+
+{% block main-content %}
+<div class="main-section-box">
+    <div class="messages_box">
+        {% if messages %}
+        {% for message in messages %}
+        <p class="messages">{{ message }}</p>
+        {% endfor %}
+        {% endif %}
+    </div>
+	<!--
+		we should exercise with a grid layout
+	-->
+	<div class="inner-main-section-box">
+		<article class="demographic-box">
+			<div class="lbl-ipt-grp">
+				<label for="uname">Username: </label>
+				<input type="text" id="uname" name="user-name" value={{ user.username }} size=20 readonly>
+			</div>
+			<div class="lbl-ipt-grp">
+				<label for="fname">First name: </label>
+				<input type="text" id="fname" name="first-name" value={{ user.first_name }} size=20 readonly>
+			</div>
+			<div class="lbl-ipt-grp">
+				<label for="lname">Last name: </label>
+				<input type="text" id="lname" name="last-name" value={{ user.last_name }} size=20 readonly>
+			</div>
+			<div class="lbl-ipt-grp">
+				<label for="email">Email: </label>
+				<input type="text" id="email" name="email" value={{ user.email }} size=20 readonly>
+			</div>
+
+            {% comment %}
+            the template rendered from calling 'edit-about' named url should override below 'about_section' block
+            to show a textarea to capture user's 'about' message.
+            {% endcomment %}
+            {% block about_section %}
+            <div class="lbl-ipt-grp">
+                <label for="about">About: </label>
+                {% if tutor_profile_record %}
+                <div class="about-txt-box">
+                    <p class="article-text">{{ tutor_profile_record.about }}</p>
+                </div>
+                {% else %}
+                <input type="text" id="about" name="about_msg" size=20 placeholder="Message about yourself" readonly>
+                {% endif %}
+				<div class="edit-icon">
+					<a href="{% url 'edit-about' user.id %}">
+						<img src="{% static 'log_in/image/icons8-edit.svg' %}" width=20 height=20 title="Edit/Change.">
+					</a>
+				</div>
+            </div>
+            {% endblock %}
+		</article>
+
+		<article class="school-major-box">
+			<div class="lbl-ipt-grp">
+				<label for="school-name">School: </label>
+				{% block school-input %}
+				{% comment %}
+				we need to use the below 'size' context variable because
+				the width of the input field may cut off/limit how many
+				characters are visible so we adjust the 'size' attribute
+				of the input field by determining in view logic, the 
+				length of the school name.
+				{% endcomment %}
+				<input type="text" id="school-name" name="school" {% if request.user.school %} value="{{ user.school.name }}" {% endif %} {% if size %}size={{ size }} {% endif %} readonly>
+				{% comment %}
+				TODO: will need to enhance/improve dynamic search for
+				input fields that may have a substantial number of results.
+				i.e if number of schools are more than 10, will need
+				some way to update datalist to only capture maybe the
+				first 5-10 results. will maybe need javascript to fetch
+				update to datalist options and backend will have to do
+				a database query using 'LIKE' for each keystroke from user.
+				{% endcomment %}
+				{% block field_data_list %}
+				{% endblock %}
+				<div class="edit-icon">
+					<a href="{% url 'edit-school' %}">
+						<img src="{% static 'log_in/image/icons8-edit.svg' %}" width=20 height=20 title="Edit/Change.">
+					</a>
+				</div>
+				{% endblock school-input %}
+			</div>
+
+			{% block major_section %}
+			{% for major in list_of_majors %}
+			<div class="lbl-ipt-grp">
+				<label for="major">Major: </label>
+				<input type="text" id="major" name="major" value="{{ major.major.major }}"  readonly>
+
+				<div class="edit-icon">
+					<a href="{% url 'edit-major' major.id %}">
+						<img src="{% static 'log_in/image/icons8-edit.svg' %}" width=20 height=20 title="Edit/Change.">
+					</a>
+				</div>
+			</div>
+			{% endfor %}
+
+			{% block new_major %}
+			{% endblock new_major %}
+
+			{% if success %}
+				<p id="school-major-box-results">{{ success }}</p>
+			{% endif %}
+
+			{% block add_major_section_btn %}
+			<div class="section-btns">
+				<a id="add-major-btn" class="add-btns" href="{% url 'add_major' user.id %}">Add Major</a>
+			</div>
+			{% endblock add_major_section_btn %}
+			{% endblock major_section %}
+		</article>
+
+		<article class="current-courses-box">
+            {% comment %}
+			{% if group == "tutor" %}
+            i think it's better if we just use 'isTutor' context variable instead of above
+            {% endcomment %}
+            {% if isTutor %}
+			{% comment %}
+			i think we'll have to add a field/column to 'UserCoursesMap'
+			table to record semester/yr course was taken so we know
+			which courses to archive and which courses are current, esp
+			for tutors as they'll need to keep track of which courses
+			they've taken which will allow them to tutor for those
+			courses. Challenge will be best data type for that field
+			if we're using 'semester/yr' or if we should keep it separate.
+			{% endcomment %}
+			<p class="tutors-course-heading">COURSE(S) TAKEN: </p>
+			<div class="table-box">
+				<table>
+				{% for course in course_history %}
+				{% comment  %}
+				<li>{{ course.taking_course.course_code }}: {{ course.taking_course.name }}</li>
+				going to try to render listing of courses on table instead.
+				{% endcomment %}
+				<tr>
+					<td class="course_code_td">{{ course.taking_course.course_code }}</td>
+					<td class="course_name_td">{{ course.taking_course.name }}</td>
+				</tr>
+				{% endfor %}
+				</table>
+			</div>
+			{% endif %}
+			{% block courses-section %}
+			<p id="general-course-heading">CURRENT COURSES</p>
+			{% comment %}
+			try to render this section as a table as well.
+			{% for course_map in current_courses %}
+			<div class="lbl-ipt-grp">
+				<label class="course-code">{{ course_map.taking_course.course_code }}</label>
+				<input type="text" id="course" name="course" value="{{ course_map.taking_course.name }}"  readonly>
+
+				<div class="edit-icon">
+					<a href="{% url 'edit-course' course_map.id %}">
+						<img src="{% static 'log_in/image/icons8-edit.svg' %}" width=20 height=20 title="Edit/Change.">
+					</a>
+				</div>
+			</div>
+			{% endfor %}
+			{% endcomment %}
+
+			<div class="table-box">
+				<table>
+				{% for course_map in current_courses %}
+					<tr id="course_tr_{{ course_map.id }}">
+						<td  class="course_code_td">{{ course_map.taking_course.course_code }}</td>
+						<td  class="course_name_td">{{ course_map.taking_course.name }}</td>
+						<td class="delete-td">
+							<div class="delete-icon">
+								<a href="{% url 'delete-course' course_map.id %}">
+									<img src="{% static 'log_in/image/delete2.png' %}" width=20 height=20 title="Delete course.">
+								</a>
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+				</table>
+			</div>
+			{% endblock %}
+			{% block add_course_section_btn %}
+			<div class="section-btns">
+				<a id="add-course-btn" class="add-btns" href="{% url 'add_course' user.id %}">Add Course</a>
+			</div>
+			{% endblock add_course_section_btn %}
+
+
+		</article>
+
+	{% block new_course_div %}
+	{% endblock new_course_div %}
+
+	</div>
+</div>
+{% endblock %}

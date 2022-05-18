@@ -1,0 +1,80 @@
+{% extends "log_in/login.html" %}
+
+{% load static %}
+<!doctype html>
+	<meta charset="utf-8">
+    {% block styles %}
+    {{ block.super }}
+	<link rel="stylesheet" type="text/css" href="{% static 'log_in/css/signup_form.css' %}">
+    {% endblock %}
+
+	<body>
+        <div class="body-box">
+            <div class="form-box">
+                {% block form_section %}
+                <form method="post" action="{% url 'signup' %}">
+                    {% csrf_token %}
+                    {% comment %}
+                    {{ form }}
+                    we can be more specific/granular by getting the 
+                    form's specific fields and its attributes.
+                    {% endcomment %}
+
+                    {% comment %}
+                    we'll have to temporarily move below user input for setting group
+                    user is in to the user's profile settings view until we figure out
+                    how to customize 'signup' view to allow for additional user inputs.
+                    {% endcomment %}
+                    {% comment %}
+                    <label for="typeUser">Type of account: </label>
+                    <input type="radio" id="Tutor" name="usertype" value="tutors" required> 
+                    <label for="Tutor">Tutor</label>
+                    <input type="radio" id="Student" name="usertype" value="students" required> 
+                    <label for="Student">Student</label>
+                    {% endcomment %}
+                    <br>
+                    <br>
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                    <br>
+                    {{ form.password1.label_tag }}
+                    {{ form.password1 }}
+                    {% comment %}
+                    lol, there's no point in checking for errors on an 
+                    incorrectly filled out form because i just discovered
+                    django's built in UserCreationForm doesn't have any
+                    constraint or validation. I tested creating a user 
+                    in django's shell with a password of less than 8 characters
+                    and it went through. But we'll keep below checks
+                    just in case.
+                    {% endcomment %}
+                    <br>
+                    {{ form.password2.label_tag }}
+                    {{ form.password2 }}
+                    <br>
+
+                    <div class="input-box"> 
+                        <button type="submit">Submit</button> 
+                    </div> 
+
+                </form>
+                {% if form.non_field_errors %}
+                    <div class="form-errors-box">
+                        <p>{{ form.non_field_errors }}</p>
+                    </div>
+                {% endif %}
+                {% if form_error %}
+                    <div class="field-error-box">
+                        {% for field in form %}
+                            {% if field.errors %}
+                                    {{ field.errors }}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% endblock %}
+            </div>
+        </div>
+	</body>
+</html>
+

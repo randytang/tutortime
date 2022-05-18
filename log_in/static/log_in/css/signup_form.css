@@ -1,0 +1,8 @@
+.field-error-box {
+	width: 500px;
+	background-color: #f7d5d5;
+	border: 1px solid #cf0101;
+	border-radius: 5px;
+	color: red;
+	margin: 10px;
+}

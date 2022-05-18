@@ -1,0 +1,32 @@
+{% extends 'log_in/find-tutors.html' %}
+{% load static %}
+
+{% block styles %}
+	{{ block.super }}
+	<link rel="stylesheet" type="text/css" href="{% static 'log_in/css/find-tutors-list.css' %}">
+{% endblock %}
+
+
+{% block tutor_search_results %}
+<article class="search-results-box">
+    {% if resultsqs %}
+    <table>
+    {% for user_course_map in resultsqs %}
+    <tr>
+        {% comment %}
+        <td class="generic-radio"><input type="radio" name="tutor_selected" value={{ user_course_map.user.id }} required></td><td>{{ user_course_map.user.first_name + " " + user_course_map.user.last_name }}</td> 
+        instead of providing the list of tutors as input elements to be selected via radio button, we should list the tutors
+        as hyperlinks/anchor elements as it not only simplifies the implementation but semantically makes sense as we're not
+        "POST"ing to the backend but rather just navigating to a different view. 
+        {% endcomment %}
+        {% comment %}
+        for some reason, 'course_id' isn't passing through to named url 'view-tutor-profile'
+        {% endcomment %}
+        <a class="list-links" href="{% url 'view-tutor-profile' user_course_map.user.id course_id %}" title="Tutor brief.">{{ user_course_map.user.first_name }} {{ user_course_map.user.last_name }}</a>
+    </tr>
+    {% endfor %}
+    </table>
+   
+    {% endif %}
+</article>
+{% endblock %}

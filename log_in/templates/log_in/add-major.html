@@ -1,0 +1,33 @@
+{% extends 'log_in/profile-details.html' %}
+
+{% load static %}
+
+{% block new_major %}
+<form method="post" action="{% url 'add_major' user_id %}">
+	<div class="lbl-ipt-grp">
+		<label for="major">Major: </label>
+		<input {% if isMultipleValue %} list="{{ listAttributeName }}" {% endif %} type="text" class="{{ classOfInput }}" name="{{ nameOfInput }}" placeholder="{{ existingValue }}" {% if size %} size={{ size }} {% endif %} autocomplete="off">
+		{% block field_data_list %}
+		<datalist id="{{ listAttributeName }}">
+			{% for option in options_for_datalist %}
+				{% if option %}
+					<option value="{{ option.major }}">
+				{% endif %}
+			{% endfor %}
+		</datalist>
+		{% endblock %}
+		<input type="image" id="save-icon" src="{% static 'log_in/image/icons8-save-50.png' %}" width=20 height=20 title="Save changes.">
+	</div>
+		   {% csrf_token %}
+</form>
+{% endblock %}
+
+{% block add_major_section_btn %}
+{% comment %}
+we specified an empty block here because we want to override the parent's 
+section for this. by leaving this empty, the parent's block is not rendered 
+thus the add major button won't be displayed which is the intended effect
+as we don't want to confuse the user by having them click 'add major' instead
+of the 'save' button adjacent to major input field.
+{% endcomment %}
+{% endblock %}

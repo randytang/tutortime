@@ -1,0 +1,85 @@
+body {
+    margin: 0;
+    height: 100vh;
+    /*
+    background-color: #f1f0f0;
+    */
+    background-color: #f8f8f8;
+}
+
+.body-box {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/*
+ * going to make this form box generic so we can use styling for user registration
+ * as well instead of just login view.
+.signin-form-box {
+*/
+.form-box {
+    width: max-content;
+    height: max-content;
+    border-radius: 15px;
+    box-sizing: content-box;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+}
+
+.input-box {
+    margin: 0;
+}
+
+
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #6c0808;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+label {
+    font-weight: bold;
+}
+
+.messages {
+    border: 1px solid #a8fda8;
+    color: #008100;
+    border-radius: 5px;
+    background-color: #e7ffe7;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+#signup-anchor {
+    color: black;
+    text-decoration: none;
+}
+
+#signup-anchor:hover {
+    color: #6c0808;
+}

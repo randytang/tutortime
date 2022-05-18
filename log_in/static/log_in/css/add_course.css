@@ -1,0 +1,21 @@
+.new-course-box {
+	display: flex;
+	align-items: start;
+	/*
+	flex-wrap: wrap;
+	flex-direction: row-reverse;
+	*/
+}
+.search-wrapper {
+	display: flex;
+	align-items: center;
+}
+
+.course-row-box {
+	display: flex;
+}
+
+.course-radio-td {
+	border-style: none;
+	background-color: transparent;
+}

@@ -1,0 +1,16 @@
+{% load static %}
+<!doctype html>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="{% static 'log_in/css/signup_result.css' %}">
+
+	<body>
+		<a href="{% url 'login' %}">Login</a>
+
+		{% if success %}
+			<div class="signup-result">
+				<p>{{ success }}</p>
+			</div>
+		{% endif %}
+	</body>
+</html>
+

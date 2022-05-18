@@ -1,0 +1,18 @@
+.article-headings {
+    font-size: 12px;
+}
+
+.article-btns {
+     text-decoration: none;
+     border-radius: 5px;
+     background-color: white;
+     padding: 5px;
+     color: #8f3535;
+     box-shadow: 3px 4px 20px 0px rgb(0 0 0 / 20%);
+     border: none;
+ }
+
+ .article-btns:hover {
+    color: white;
+    background-color: #8f3535;
+}

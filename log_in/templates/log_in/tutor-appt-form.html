@@ -1,0 +1,38 @@
+{% extends 'log_in/find-tutors-overview.html' %}
+{% load static %}
+
+
+{% block styles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'log_in/css/tutor-appt-form.css' %}">
+{% endblock %}
+
+
+{% block reservation %}
+<article class="reserve-box">
+    <h1 class="article-headings">Tutoring session/appointment request form</h1>
+    <form method="post" action="{% url 'request-appt' user_id tutor_id course_id %}">
+    <div class="lbl-ipt-grp">
+        <label for="subject">Subject: </label>
+        <input type="text" id="subject" name="subject" size="40" placeholder="What topic/subject do you need help with from {{ tutor.user.first_name }}?" autocomplete="off" required></input>
+    </div>
+    <div class="lbl-ipt-grp">
+        <label for="day">Date: </label>
+        <input type="date" id="day" name="date" required></input>
+    </div>
+    <div class="lbl-ipt-grp">
+        <label for="time">Time: </label>
+        <input type="time" id="time" name="time" required></input>
+    </div>
+    <div class="lbl-ipt-grp">
+        <label for="location">Location: </label>
+        <input type="text" id="location" name="location" required></input>
+    </div>
+    <div class="section-btns">
+        <button type="submit" class="article-btns">Submit</button>
+    </div>
+        {% csrf_token %}
+    </form>
+
+</article>
+{% endblock %}

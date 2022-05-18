@@ -1,0 +1,55 @@
+{% extends 'log_in/add-course.html' %}
+{% comment %}
+{% extends 'log_in/profile-details.html' %}
+lol, view renders this template but because we had this template
+only extending profile-details template, it removed 'new course' section/article' so it needs to extend the 'add-course.html'
+{% endcomment %}
+
+{% load static %}
+
+
+{% block search_results %}
+{% if results %}
+<div class="course_result">
+<form id="course_selection" method="post" action="{% url 'add_course' user.id %}">
+	<table>
+	{% for record in results %}
+	<div class="course_row_box">
+		<tr>
+			<td class="course-radio-td"><label for="course_id_{{ record.id }}"><input id="course_id_{{ record.id }}" name="course" type="radio" value="{{ record.id }}" required></td><td>{{ record.course_code }}</td><td>{{ record.name }}</td></label>
+		</tr>
+	</div>
+	{% endfor %}
+	</table>
+
+	<label for="semester_input">Semester: </label>
+	<select form="course_selection" name="semester" id="semester_input">
+		<option value="0">Spring</option>
+		<option value="1">Summer</option>
+		<option value="2">Fall</option>
+		<option value="3">Winter</option>
+	</select>
+
+    <div class="section-btns">
+        <button form="course_selection" type="submit" id="add-course-btn" class="add-btns">Add course</button>
+        {% comment %}
+        going to try to use button element instead of anchor element
+        for better semantics
+        <a id="add-course-btn" class="add-btns" href="{% url 'add_course' user.id %}">Add course</a>
+        {% endcomment %}
+    </div>
+    <input type="hidden" name="from" value={{ route0 }}>
+
+	{% csrf_token %}
+</form>
+{% else %}
+{% comment %}
+django docs recommend we iterate throught messages even if there's only one
+so it resets/flushes it back to 0 to be reused again for another request/response
+{% endcomment %}
+{% for message in messages %}
+	<p class="error_msg">{{ message }}<p>
+{% endfor %}
+{% endif %}
+</div>
+{% endblock search_results %}
